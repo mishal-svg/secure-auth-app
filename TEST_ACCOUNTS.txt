@@ -1,0 +1,17 @@
+TEST ACCOUNTS
+
+Normal User
+
+Name: Ali hassan 
+Email: alihassan@gmail.com
+Password: Ali@12345
+Role: user
+
+
+
+Administrator
+
+Name: Mishal Shahzadi
+Email: mishal@gmail.com
+Password: 12345
+Role: admin
