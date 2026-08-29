@@ -126,10 +126,9 @@ app.get("/api/admin", authenticateToken, requireRole("admin"), (req, res) => {
 });
 
 app.get("/", (req, res) => {
-    res.json({
-        message: "Week 6 API is running"
-    });
+    res.sendFile(__dirname + "/public/index.html");
 });
+
 
 const PORT = process.env.PORT || 3000;
 
