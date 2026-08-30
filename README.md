@@ -180,4 +180,4 @@ Peer testing was also completed and no critical issues were reported.
 
 GitHub repository:
 
-`secure-auth-app`
+` https://github.com/mishal-svg/secure-auth-app.git`
