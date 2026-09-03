@@ -176,6 +176,40 @@ Register → Login → JWT Token → Protected Profile
 
 Peer testing was also completed and no critical issues were reported.
 
+## Production Deployment
+
+The application is deployed and publicly accessible online.
+
+Production URL:
+
+https://secure-auth-app-sigma.vercel.app
+
+## Demo & Main Features
+
+The application demonstrates a complete authentication workflow:
+
+* User registration
+* User login
+* JWT authentication
+* Protected profile/dashboard access
+* Role-based admin access
+* Secure password hashing with bcrypt
+* Database integration with Supabase/PostgreSQL
+
+The deployed application can be accessed using the Production URL above.
+
+## Known Limitations & Future Improvements
+
+Currently, the application focuses on the core authentication workflow.
+
+Future improvements may include:
+
+* Password reset functionality
+* Email verification
+* Improved dashboard features
+* More detailed admin management
+* Additional security and monitoring features
+
 ## Repository
 
 GitHub repository:
