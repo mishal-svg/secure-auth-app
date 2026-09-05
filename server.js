@@ -38,8 +38,12 @@ app.post("/api/register", async (req, res) => {
             ]);
 
         if (error) {
+            console.error("REGISTER ERROR:", error);
+
             return res.status(400).json({
-                message: error.message
+                message: error.message,
+                details: error.details,
+                hint: error.hint
             });
         }
 
@@ -138,7 +142,6 @@ app.get("/", (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
 });
 
-// Local development
 if (require.main === module) {
     const PORT = process.env.PORT || 3000;
 
@@ -147,5 +150,4 @@ if (require.main === module) {
     });
 }
 
-// Vercel
 module.exports = app;
