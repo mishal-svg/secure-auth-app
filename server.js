@@ -2,13 +2,14 @@ require("dotenv").config();
 
 const express = require("express");
 const jwt = require("jsonwebtoken");
-
-const app = express();
 const bcrypt = require("bcrypt");
+
 const supabase = require("./src/supabaseClient");
 const supabaseAdmin = require("./src/supabaseAdmin");
 const authenticateToken = require("./src/middleware/authMiddleware");
 const requireRole = require("./src/middleware/roleMiddleware");
+
+const app = express();
 
 app.use(express.json());
 app.use(express.static("public"));
@@ -26,15 +27,15 @@ app.post("/api/register", async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const { error } = await supabase
-        .from("users")
-        .insert([
-            {
-                name,
-                email,
-                password: hashedPassword,
-                role: "user"
-            }
-        ]);
+            .from("users")
+            .insert([
+                {
+                    name,
+                    email,
+                    password: hashedPassword,
+                    role: "user"
+                }
+            ]);
 
         if (error) {
             return res.status(400).json({
@@ -47,6 +48,8 @@ app.post("/api/register", async (req, res) => {
         });
 
     } catch (error) {
+        console.error("Register error:", error);
+
         res.status(500).json({
             message: "Server error"
         });
@@ -69,19 +72,17 @@ app.post("/api/login", async (req, res) => {
             .eq("email", email)
             .single();
 
-            if (error || !user) {
-                
-            
-                return res.status(401).json({
-                    message: "Invalid email or password"
-                });
-            }
+        if (error || !user) {
+            return res.status(401).json({
+                message: "Invalid email or password"
+            });
+        }
 
         const passwordMatch = await bcrypt.compare(
             password,
             user.password
         );
-        
+
         if (!passwordMatch) {
             return res.status(401).json({
                 message: "Invalid email or password"
@@ -106,6 +107,8 @@ app.post("/api/login", async (req, res) => {
         });
 
     } catch (error) {
+        console.error("Login error:", error);
+
         res.status(500).json({
             message: "Server error"
         });
@@ -118,22 +121,31 @@ app.get("/api/profile", authenticateToken, (req, res) => {
         user: req.user
     });
 });
-app.get("/api/admin", authenticateToken, requireRole("admin"), (req, res) => {
-    res.json({
-        message: "Admin access granted",
-        user: req.user
-    });
-});
+
+app.get(
+    "/api/admin",
+    authenticateToken,
+    requireRole("admin"),
+    (req, res) => {
+        res.json({
+            message: "Admin access granted",
+            user: req.user
+        });
+    }
+);
 
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
 });
 
+// Local development
+if (require.main === module) {
+    const PORT = process.env.PORT || 3000;
 
-const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+    });
+}
 
-console.log("JWT_SECRET loaded:", !!process.env.JWT_SECRET);
-
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+// Vercel
+module.exports = app;
